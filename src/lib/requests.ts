@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Ticket, User } from "./entities";
 
-
 const BASE_API_URL =
     "https://nfctron-frontend-seating-case-study-2024.vercel.app";
 
@@ -33,11 +32,15 @@ export const loginUser = async (email: string, password: string) => {
         });
         return response.data;
     } catch (error) {
-        console.log("Error logging in: ", error);
+        return error;
     }
 };
 
-export const sendOrder = async (eventId: string, tickets: Ticket[], user: User) => {
+export const sendOrder = async (
+    eventId: string,
+    tickets: Ticket[],
+    user: User
+) => {
     try {
         const response = await axios.post(`${BASE_API_URL}/order`, {
             eventId,
@@ -46,6 +49,6 @@ export const sendOrder = async (eventId: string, tickets: Ticket[], user: User) 
         });
         return response.data;
     } catch (error) {
-        console.log("Error sending order: ", error);
+        return error;
     }
-}
+};

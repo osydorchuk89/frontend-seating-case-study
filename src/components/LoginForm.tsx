@@ -19,6 +19,7 @@ interface LoginFormInputs {
 
 export const LoginForm = () => {
     const [invalidCredentials, setInvalidCredentials] = useState(false);
+    const [error, setError] = useState(false);
     const loginDialog = useAppSelector((state) => state.loginDialog);
     const dispatch = useAppDispatch();
     const {
@@ -29,12 +30,14 @@ export const LoginForm = () => {
     } = useForm<LoginFormInputs>();
     const onLogin: SubmitHandler<LoginFormInputs> = async (data) => {
         const response = await loginUser(data.email, data.password);
-        if (response) {
+        if (response.message === "Login successful") {
             setInvalidCredentials(false);
             dispatch(userActions.loginUser(response.user));
             dispatch(loginDialogActions.closeDialog());
-        } else {
+        } else if (response.message === "Request failed with status code 401") {
             setInvalidCredentials(true);
+        } else {
+            setError(true);
         }
     };
 
@@ -65,7 +68,10 @@ export const LoginForm = () => {
                         id="email"
                         className="py-1 px-2 w-full border border-zinc-300 rounded-md"
                         type="email"
-                        onFocus={() => setInvalidCredentials(false)}
+                        onFocus={() => {
+                            setInvalidCredentials(false);
+                            setError(false);
+                        }}
                         {...register("email", {
                             required: "This field is required",
                             pattern: {
@@ -88,7 +94,10 @@ export const LoginForm = () => {
                         id="password"
                         className="py-1 px-2 w-full border border-zinc-300 rounded-md"
                         type="password"
-                        onFocus={() => setInvalidCredentials(false)}
+                        onFocus={() => {
+                            setInvalidCredentials(false);
+                            setError(false);
+                        }}
                         {...register("password", { required: true })}
                     />
                 </div>
@@ -100,6 +109,11 @@ export const LoginForm = () => {
                 {invalidCredentials && (
                     <span className="text-center text-red-800 font-medium mt-5">
                         Invalid credentials
+                    </span>
+                )}
+                {error && (
+                    <span className="text-center text-red-800 font-medium mt-5">
+                        Something went wrong. Please try again later.
                     </span>
                 )}
                 <div className="flex justify-center mt-5">

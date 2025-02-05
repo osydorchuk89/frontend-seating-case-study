@@ -12,6 +12,7 @@ import {
     successDialogActions,
 } from "@/store";
 import { DialogWrapper } from "./DialogWrapper";
+import { useState } from "react";
 
 interface CustomerDetailsInputs {
     firstName: string;
@@ -20,6 +21,7 @@ interface CustomerDetailsInputs {
 }
 
 export const CustomerDialog = () => {
+    const [error, setError] = useState(false);
     const event = useAppSelector((state) => state.event);
     const cart = useAppSelector((state) => state.cart);
     const customerDialog = useAppSelector((state) => state.customerDialog);
@@ -39,11 +41,13 @@ export const CustomerDialog = () => {
             };
         });
         const response = await sendOrder(event.eventId, tickets, user);
-        if (response) {
+        if (response.message.startsWith("Order successful, congratulations!")) {
             dispatch(cartActions.clearCart());
             dispatch(customerDialogActions.closeDialog());
             dispatch(checkoutDialogActions.closeDialog());
             dispatch(successDialogActions.openDialog());
+        } else {
+            setError(true);
         }
     };
 
@@ -118,6 +122,11 @@ export const CustomerDialog = () => {
                 {errors.email && (
                     <span className="text-sm text-end text-red-700 font-medium">
                         {errors.email.message}
+                    </span>
+                )}
+                {error && (
+                    <span className="text-center text-red-800 font-medium mt-5">
+                        Something went wrong. Please try again later.
                     </span>
                 )}
                 <div className="w-1/3 self-center flex justify-between mt-5">

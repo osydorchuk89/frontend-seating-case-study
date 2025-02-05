@@ -10,8 +10,10 @@ import {
     successDialogActions,
 } from "@/store";
 import { DialogWrapper } from "./DialogWrapper";
+import { useState } from "react";
 
 export const CheckoutDialog = () => {
+    const [error, setError] = useState(false);
     const event = useAppSelector((state) => state.event);
     const cart = useAppSelector((state) => state.cart);
     const user = useAppSelector((state) => state.user);
@@ -26,10 +28,12 @@ export const CheckoutDialog = () => {
             };
         });
         const response = await sendOrder(event.eventId, tickets, user);
-        if (response) {
+        if (response.message.startsWith("Order successful, congratulations!")) {
             dispatch(cartActions.clearCart());
             dispatch(checkoutDialogActions.closeDialog());
             dispatch(successDialogActions.openDialog());
+        } else {
+            setError(true);
         }
     };
 
@@ -60,6 +64,11 @@ export const CheckoutDialog = () => {
                 ))}
             </ul>
             <p className="font-semibold">Total price: {cart.totalPrice} CZK</p>
+            {error && (
+                <span className="text-center text-red-800 font-medium mt-5">
+                    Something went wrong. Please try again later.
+                </span>
+            )}
             <div className="w-1/3 self-center flex justify-between">
                 <Button
                     variant="destructive"
