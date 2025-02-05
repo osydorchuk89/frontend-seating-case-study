@@ -1,10 +1,6 @@
-import axios, { AxiosError } from "axios";
-import { Seat, SeatRow, Ticket, TicketType, User } from "./entities";
+import axios from "axios";
+import { Ticket, User } from "./entities";
 
-interface TicketsAndSeats {
-    tikcetTypes: TicketType[];
-    seatRows: SeatRow[];
-}
 
 const BASE_API_URL =
     "https://nfctron-frontend-seating-case-study-2024.vercel.app";
