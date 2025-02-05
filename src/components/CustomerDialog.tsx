@@ -78,6 +78,7 @@ export const CustomerDialog = () => {
                         id="firstName"
                         className="py-1 px-2 w-full border border-zinc-300 rounded-md"
                         type="text"
+                        onFocus={() => setError(false)}
                         {...register("firstName", { required: true })}
                     />
                 </div>
@@ -94,6 +95,7 @@ export const CustomerDialog = () => {
                         id="lastName"
                         className="py-1 px-2 w-full border border-zinc-300 rounded-md"
                         type="text"
+                        onFocus={() => setError(false)}
                         {...register("lastName", { required: true })}
                     />
                 </div>
@@ -110,6 +112,7 @@ export const CustomerDialog = () => {
                         id="email"
                         className="py-1 px-2 w-full border border-zinc-300 rounded-md"
                         type="email"
+                        onFocus={() => setError(false)}
                         {...register("email", {
                             required: "This field is required",
                             pattern: {

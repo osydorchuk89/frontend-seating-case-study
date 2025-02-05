@@ -20,7 +20,7 @@ export const SuccessDialog = () => {
                 <Button
                     onClick={() => dispatch(successDialogActions.closeDialog())}
                 >
-                    Good!
+                    Got it!
                 </Button>
             </div>
         </>
